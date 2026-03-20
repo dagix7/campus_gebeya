@@ -102,71 +102,118 @@ export default async function DashboardPage() {
               </Link>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="border-b">
-                  <tr>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">
-                      Title
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">
-                      Category
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">
-                      Price
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">
-                      Status
-                    </th>
-                    <th className="text-left py-3 px-4 font-semibold text-gray-900">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {listings.map((listing: any) => (
-                    <tr key={listing.id} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4">
-                        <Link
-                          href={`/listings/${listing.id}`}
-                          className="text-blue-600 hover:text-blue-700"
-                        >
-                          {listing.title}
-                        </Link>
-                      </td>
-                      <td className="py-3 px-4">{listing.category}</td>
-                      <td className="py-3 px-4 font-semibold">
-                        {listing.price_etb} ETB
-                      </td>
-                      <td className="py-3 px-4">
-                        <span
-                          className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
-                            listing.status === "Active"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-100 text-gray-800"
-                          }`}
-                        >
-                          {listing.status}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 space-x-2">
-                        <Link
-                          href={`/listings/${listing.id}/edit`}
-                          className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
-                        >
-                          <Edit2 size={16} />
-                          Edit
-                        </Link>
+            <>
+              {/* Mobile Card View */}
+              <div className="md:hidden space-y-4">
+                {listings.map((listing: any) => (
+                  <div key={listing.id} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <div className="flex justify-between items-start mb-3">
+                      <Link
+                        href={`/listings/${listing.id}`}
+                        className="text-blue-600 hover:text-blue-700 font-medium text-lg"
+                      >
+                        {listing.title}
+                      </Link>
+                      <span
+                        className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+                          listing.status === "Active"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {listing.status}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center text-sm text-gray-600 mb-3">
+                      <span>{listing.category}</span>
+                      <span className="font-semibold text-gray-900">{listing.price_etb.toLocaleString()} ETB</span>
+                    </div>
+                    <div className="flex gap-3 pt-3 border-t border-gray-200">
+                      <Link
+                        href={`/listings/${listing.id}/edit`}
+                        className="flex-1 inline-flex items-center justify-center gap-1 text-blue-600 hover:text-blue-700 py-2 px-3 bg-blue-50 rounded-lg text-sm font-medium"
+                      >
+                        <Edit2 size={16} />
+                        Edit
+                      </Link>
+                      <div className="flex-1">
                         <DeleteListingButton
                           listingId={listing.id}
                           listingTitle={listing.title}
                         />
-                      </td>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full">
+                  <thead className="border-b">
+                    <tr>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900">
+                        Title
+                      </th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900">
+                        Category
+                      </th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900">
+                        Price
+                      </th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900">
+                        Status
+                      </th>
+                      <th className="text-left py-3 px-4 font-semibold text-gray-900">
+                        Actions
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {listings.map((listing: any) => (
+                      <tr key={listing.id} className="border-b hover:bg-gray-50">
+                        <td className="py-3 px-4">
+                          <Link
+                            href={`/listings/${listing.id}`}
+                            className="text-blue-600 hover:text-blue-700"
+                          >
+                            {listing.title}
+                          </Link>
+                        </td>
+                        <td className="py-3 px-4">{listing.category}</td>
+                        <td className="py-3 px-4 font-semibold">
+                          {listing.price_etb.toLocaleString()} ETB
+                        </td>
+                        <td className="py-3 px-4">
+                          <span
+                            className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
+                              listing.status === "Active"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
+                            {listing.status}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 space-x-2">
+                          <Link
+                            href={`/listings/${listing.id}/edit`}
+                            className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                          >
+                            <Edit2 size={16} />
+                            Edit
+                          </Link>
+                          <DeleteListingButton
+                            listingId={listing.id}
+                            listingTitle={listing.title}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
       </div>
