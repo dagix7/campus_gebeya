@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { MessageCircle } from "lucide-react";
 import ShareButton from "@/components/share-button";
+import Breadcrumbs from "@/components/breadcrumbs";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -56,9 +57,13 @@ export default async function ListingDetailPage({
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <Link href="/" className="text-blue-600 hover:text-blue-700 mb-6 inline-block">
-          ← Back to Listings
-        </Link>
+        <Breadcrumbs
+          items={[
+            { label: 'Listings', href: '/' },
+            { label: listing.category, href: `/?category=${listing.category}` },
+            { label: listing.title },
+          ]}
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Left - Image */}
