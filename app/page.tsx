@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 import { CAMPUS_OPTIONS, CATEGORY_OPTIONS } from "@/lib/utils";
 import { Search } from "lucide-react";
@@ -115,12 +116,14 @@ export default async function Home({
               >
                 {listing.image_url && (
                   <div className="relative h-48 bg-gray-200">
-                    <img
+                    <Image
                       src={listing.image_url}
                       alt={listing.title}
-                      className="w-full h-full object-cover"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
-                    <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">
                       {listing.category}
                     </div>
                   </div>

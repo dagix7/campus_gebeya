@@ -1,7 +1,38 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { MessageCircle, Share2 } from "lucide-react";
+import Image from "next/image";
+import type { Metadata } from "next";
+import { MessageCircle } from "lucide-react";
+import ShareButton from "@/components/share-button";
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const supabase = await createClient();
+
+  const { data: listing } = await supabase
+    .from('listings')
+    .select('title, description, image_url, price_etb, category')
+    .eq('id', id)
+    .single();
+
+  if (!listing) {
+    return {
+      title: 'Listing Not Found',
+    };
+  }
+
+  return {
+    title: listing.title,
+    description: listing.description.substring(0, 160),
+    openGraph: {
+      title: listing.title,
+      description: listing.description,
+      images: listing.image_url ? [listing.image_url] : [],
+      type: 'website',
+    },
+  };
+}
 
 export default async function ListingDetailPage({
   params,
@@ -33,11 +64,16 @@ export default async function ListingDetailPage({
           {/* Left - Image */}
           <div className="md:col-span-2">
             {listing.image_url ? (
-              <img
-                src={listing.image_url}
-                alt={listing.title}
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
-              />
+              <div className="relative w-full h-96 rounded-lg shadow-lg overflow-hidden bg-gray-200">
+                <Image
+                  src={listing.image_url}
+                  alt={listing.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 66vw"
+                  priority
+                />
+              </div>
             ) : (
               <div className="w-full h-96 bg-gray-300 rounded-lg flex items-center justify-center text-gray-600">
                 No Image Available
@@ -101,10 +137,10 @@ export default async function ListingDetailPage({
                 Contact on Telegram
               </a>
 
-              <button className="w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 flex items-center justify-center gap-2 transition">
-                <Share2 size={20} />
-                Share
-              </button>
+              <ShareButton
+                title={listing.title}
+                url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/listings/${id}`}
+              />
             </div>
 
             {/* Seller Info Card */}

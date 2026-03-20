@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { Trash2, Edit2 } from "lucide-react";
+import { Edit2 } from "lucide-react";
+import DeleteListingButton from "@/components/delete-listing-button";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -156,6 +157,10 @@ export default async function DashboardPage() {
                           <Edit2 size={16} />
                           Edit
                         </Link>
+                        <DeleteListingButton
+                          listingId={listing.id}
+                          listingTitle={listing.title}
+                        />
                       </td>
                     </tr>
                   ))}

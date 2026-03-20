@@ -23,9 +23,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
             <ul className="space-y-2 text-gray-600">
-              <li><a href="#" className="hover:text-blue-600">About Us</a></li>
-              <li><a href="#" className="hover:text-blue-600">Contact</a></li>
-              <li><a href="#" className="hover:text-blue-600">Terms & Privacy</a></li>
+              <li><a href="mailto:support@campusgebeya.com" className="hover:text-blue-600">Contact Us</a></li>
+              <li><a href="/" className="hover:text-blue-600">About</a></li>
+              <li><a href="/" className="hover:text-blue-600">Terms of Service</a></li>
             </ul>
           </div>
         </div>
