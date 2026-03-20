@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { CATEGORY_OPTIONS } from "@/lib/utils";
 import { Upload } from "lucide-react";
+import Image from "next/image";
 
 export default function NewListingPage() {
   const [title, setTitle] = useState('');
@@ -220,11 +221,15 @@ export default function NewListingPage() {
               <label htmlFor="file-input" className="cursor-pointer">
                 {preview ? (
                   <div>
-                    <img
-                      src={preview}
-                      alt="Preview"
-                      className="w-full h-48 object-cover rounded-lg mb-4"
-                    />
+                    <div className="relative w-full h-48 mb-4">
+                      <Image
+                        src={preview}
+                        alt="Preview"
+                        fill
+                        className="object-cover rounded-lg"
+                        unoptimized
+                      />
+                    </div>
                     <p className="text-sm text-blue-600 font-semibold">
                       Change image
                     </p>
