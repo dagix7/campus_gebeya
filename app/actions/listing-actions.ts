@@ -4,6 +4,38 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import type { ActionResponse } from '@/types'
+import { z } from 'zod'
+
+// Zod schemas for validation
+const createListingSchema = z.object({
+  title: z.string().min(5, 'Title must be at least 5 characters').max(100, 'Title must not exceed 100 characters'),
+  description: z.string().min(20, 'Description must be at least 20 characters').max(1000, 'Description must not exceed 1000 characters'),
+  price: z.coerce.number().int('Price must be a whole number').min(1, 'Price must be at least 1 ETB').max(1000000, 'Price must not exceed 1,000,000 ETB'),
+  category: z.enum(['Gear', 'Gigs'], { message: 'Please select a valid category' }),
+})
+
+const updateListingSchema = z.object({
+  title: z.string().min(5, 'Title must be at least 5 characters').max(100, 'Title must not exceed 100 characters'),
+  description: z.string().min(20, 'Description must be at least 20 characters').max(1000, 'Description must not exceed 1000 characters'),
+  price: z.coerce.number().int('Price must be a whole number').min(1, 'Price must be at least 1 ETB').max(1000000, 'Price must not exceed 1,000,000 ETB'),
+  category: z.enum(['Gear', 'Gigs'], { message: 'Please select a valid category' }),
+})
+
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+
+function validateImage(file: File | null, required: boolean): string | null {
+  if (!file || file.size === 0) {
+    return required ? 'Please select an image' : null
+  }
+  if (file.size > MAX_IMAGE_SIZE) {
+    return 'Image must be less than 10MB'
+  }
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    return 'Image must be JPEG, PNG, or WebP'
+  }
+  return null
+}
 
 export async function createListing(_prevState: any, formData: FormData): Promise<ActionResponse> {
   try {
@@ -15,34 +47,27 @@ export async function createListing(_prevState: any, formData: FormData): Promis
       return { error: 'You must be logged in to create a listing' }
     }
 
-    // Extract form data
-    const title = formData.get('title') as string
-    const description = formData.get('description') as string
-    const priceStr = formData.get('price') as string
-    const category = formData.get('category') as string
+    // Extract and validate form data with Zod
+    const rawData = {
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      price: formData.get('price') as string,
+      category: formData.get('category') as string,
+    }
+
+    const result = createListingSchema.safeParse(rawData)
+    if (!result.success) {
+      return { error: result.error.issues[0].message }
+    }
+
+    // Validate image separately (File objects need special handling)
     const image = formData.get('image') as File
-
-    // Validation
-    if (!title || title.length < 5) {
-      return { error: 'Title must be at least 5 characters' }
-    }
-    if (!description || description.length < 20) {
-      return { error: 'Description must be at least 20 characters' }
-    }
-    if (!priceStr || isNaN(parseInt(priceStr)) || parseInt(priceStr) < 1) {
-      return { error: 'Please enter a valid price' }
-    }
-    if (!category || !['Gear', 'Gigs'].includes(category)) {
-      return { error: 'Please select a valid category' }
-    }
-    if (!image || !image.size) {
-      return { error: 'Please select an image' }
-    }
-    if (image.size > 10 * 1024 * 1024) {
-      return { error: 'Image must be less than 10MB' }
+    const imageError = validateImage(image, true)
+    if (imageError) {
+      return { error: imageError }
     }
 
-    const price = parseInt(priceStr)
+    const { title, description, price, category } = result.data
 
     // Upload image
     const timestamp = Date.now()
@@ -88,6 +113,10 @@ export async function createListing(_prevState: any, formData: FormData): Promis
     revalidatePath('/dashboard')
     redirect(`/listings/${data.id}`)
   } catch (error: any) {
+    // Handle Next.js redirect (it throws)
+    if (error?.digest?.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
     console.error('Create listing error:', error)
     return { error: error.message || 'An unexpected error occurred' }
   }
@@ -103,28 +132,27 @@ export async function updateListing(id: string, _prevState: any, formData: FormD
       return { error: 'You must be logged in to update a listing' }
     }
 
-    // Extract form data
-    const title = formData.get('title') as string
-    const description = formData.get('description') as string
-    const priceStr = formData.get('price') as string
-    const category = formData.get('category') as string
+    // Extract and validate form data with Zod
+    const rawData = {
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      price: formData.get('price') as string,
+      category: formData.get('category') as string,
+    }
+
+    const result = updateListingSchema.safeParse(rawData)
+    if (!result.success) {
+      return { error: result.error.issues[0].message }
+    }
+
+    // Validate image if provided
     const image = formData.get('image') as File
-
-    // Validation
-    if (!title || title.length < 5) {
-      return { error: 'Title must be at least 5 characters' }
-    }
-    if (!description || description.length < 20) {
-      return { error: 'Description must be at least 20 characters' }
-    }
-    if (!priceStr || isNaN(parseInt(priceStr)) || parseInt(priceStr) < 1) {
-      return { error: 'Please enter a valid price' }
-    }
-    if (!category || !['Gear', 'Gigs'].includes(category)) {
-      return { error: 'Please select a valid category' }
+    const imageError = validateImage(image, false)
+    if (imageError) {
+      return { error: imageError }
     }
 
-    const price = parseInt(priceStr)
+    const { title, description, price, category } = result.data
 
     const updates: any = {
       title,
@@ -135,10 +163,6 @@ export async function updateListing(id: string, _prevState: any, formData: FormD
 
     // Handle optional image update
     if (image && image.size > 0) {
-      if (image.size > 10 * 1024 * 1024) {
-        return { error: 'Image must be less than 10MB' }
-      }
-
       const timestamp = Date.now()
       const fileName = `${timestamp}_${image.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`
 
@@ -174,6 +198,10 @@ export async function updateListing(id: string, _prevState: any, formData: FormD
     revalidatePath('/')
     redirect(`/listings/${id}`)
   } catch (error: any) {
+    // Handle Next.js redirect (it throws)
+    if (error?.digest?.startsWith('NEXT_REDIRECT')) {
+      throw error
+    }
     console.error('Update listing error:', error)
     return { error: error.message || 'An unexpected error occurred' }
   }
@@ -187,6 +215,13 @@ export async function deleteListing(id: string): Promise<ActionResponse> {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError || !user) {
       return { error: 'You must be logged in to delete a listing' }
+    }
+
+    // Validate ID format (UUID)
+    const uuidSchema = z.string().uuid('Invalid listing ID')
+    const idResult = uuidSchema.safeParse(id)
+    if (!idResult.success) {
+      return { error: 'Invalid listing ID' }
     }
 
     // Delete listing
@@ -205,8 +240,8 @@ export async function deleteListing(id: string): Promise<ActionResponse> {
     revalidatePath('/')
     redirect('/dashboard')
   } catch (error: any) {
-    // If it's a redirect, rethrow it
-    if (error.message && error.message.includes('NEXT_REDIRECT')) {
+    // Handle Next.js redirect (it throws)
+    if (error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
     console.error('Delete listing error:', error)
@@ -222,6 +257,13 @@ export async function toggleListingStatus(id: string): Promise<ActionResponse> {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     if (userError || !user) {
       return { error: 'You must be logged in' }
+    }
+
+    // Validate ID format (UUID)
+    const uuidSchema = z.string().uuid('Invalid listing ID')
+    const idResult = uuidSchema.safeParse(id)
+    if (!idResult.success) {
+      return { error: 'Invalid listing ID' }
     }
 
     // Get current listing
