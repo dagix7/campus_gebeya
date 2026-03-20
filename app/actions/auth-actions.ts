@@ -4,34 +4,42 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import type { ActionResponse } from '@/types'
+import { z } from 'zod'
+
+// Zod schemas for validation
+const signUpSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  full_name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name must not exceed 100 characters'),
+  campus_name: z.string().min(1, 'Please select a campus'),
+  telegram_handle: z.string()
+    .regex(/^@?[a-zA-Z0-9_]{5,32}$/, 'Invalid Telegram handle. Must be 5-32 characters with only letters, numbers, and underscores'),
+})
+
+const signInSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(1, 'Please enter your password'),
+})
 
 export async function signUp(_prevState: any, formData: FormData): Promise<ActionResponse> {
   try {
     const supabase = await createClient()
 
-    // Extract form data
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const full_name = formData.get('full_name') as string
-    const campus_name = formData.get('campus_name') as string
-    const telegram_handle = formData.get('telegram_handle') as string
+    // Extract and validate form data with Zod
+    const rawData = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+      full_name: formData.get('full_name') as string,
+      campus_name: formData.get('campus_name') as string,
+      telegram_handle: formData.get('telegram_handle') as string,
+    }
 
-    // Validation
-    if (!email || !email.includes('@')) {
-      return { error: 'Please enter a valid email address' }
+    const result = signUpSchema.safeParse(rawData)
+    if (!result.success) {
+      return { error: result.error.issues[0].message }
     }
-    if (!password || password.length < 6) {
-      return { error: 'Password must be at least 6 characters' }
-    }
-    if (!full_name || full_name.length < 2) {
-      return { error: 'Name must be at least 2 characters' }
-    }
-    if (!campus_name) {
-      return { error: 'Please select a campus' }
-    }
-    if (!telegram_handle || !telegram_handle.match(/^@?[a-zA-Z0-9_]{5,32}$/)) {
-      return { error: 'Invalid Telegram handle. Must be 5-32 characters' }
-    }
+
+    const { email, password, full_name, campus_name, telegram_handle } = result.data
 
     // Create auth user
     const { data, error: signUpError } = await supabase.auth.signUp({
@@ -64,8 +72,8 @@ export async function signUp(_prevState: any, formData: FormData): Promise<Actio
     revalidatePath('/')
     redirect('/auth/login?message=Account created successfully. Please log in.')
   } catch (error: any) {
-    // If it's a redirect, rethrow it
-    if (error.message && error.message.includes('NEXT_REDIRECT')) {
+    // Handle Next.js redirect (it throws)
+    if (error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
     console.error('Sign up error:', error)
@@ -77,17 +85,18 @@ export async function signIn(_prevState: any, formData: FormData): Promise<Actio
   try {
     const supabase = await createClient()
 
-    // Extract form data
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+    // Extract and validate form data with Zod
+    const rawData = {
+      email: formData.get('email') as string,
+      password: formData.get('password') as string,
+    }
 
-    // Validation
-    if (!email || !email.includes('@')) {
-      return { error: 'Please enter a valid email address' }
+    const result = signInSchema.safeParse(rawData)
+    if (!result.success) {
+      return { error: result.error.issues[0].message }
     }
-    if (!password) {
-      return { error: 'Please enter your password' }
-    }
+
+    const { email, password } = result.data
 
     // Sign in
     const { error } = await supabase.auth.signInWithPassword({
@@ -102,8 +111,8 @@ export async function signIn(_prevState: any, formData: FormData): Promise<Actio
     revalidatePath('/')
     redirect('/dashboard')
   } catch (error: any) {
-    // If it's a redirect, rethrow it
-    if (error.message && error.message.includes('NEXT_REDIRECT')) {
+    // Handle Next.js redirect (it throws)
+    if (error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
     console.error('Sign in error:', error)
@@ -124,8 +133,8 @@ export async function signOut(): Promise<ActionResponse> {
     revalidatePath('/')
     redirect('/')
   } catch (error: any) {
-    // If it's a redirect, rethrow it
-    if (error.message && error.message.includes('NEXT_REDIRECT')) {
+    // Handle Next.js redirect (it throws)
+    if (error?.digest?.startsWith('NEXT_REDIRECT')) {
       throw error
     }
     console.error('Sign out error:', error)
