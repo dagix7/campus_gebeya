@@ -34,12 +34,17 @@ export default function LoginForm() {
         </h2>
 
         {state?.error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+          <div
+            id="form-error"
+            role="alert"
+            aria-live="assertive"
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm"
+          >
             {state.error}
           </div>
         )}
 
-        <form action={formAction} className="space-y-4">
+        <form action={formAction} className="space-y-4" aria-describedby={state?.error ? "form-error" : undefined}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
@@ -51,6 +56,7 @@ export default function LoginForm() {
               placeholder="you@example.com"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               required
+              aria-invalid={state?.error ? "true" : undefined}
             />
           </div>
 
@@ -65,6 +71,7 @@ export default function LoginForm() {
               placeholder="Your password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               required
+              aria-invalid={state?.error ? "true" : undefined}
             />
           </div>
 

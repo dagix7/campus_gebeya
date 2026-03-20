@@ -1,7 +1,6 @@
 'use client'
 
 import Link from "next/link"
-import { useEffect } from "react"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 import { signUp } from "@/app/actions/auth-actions"
@@ -36,12 +35,17 @@ export default function SignupForm() {
         </h2>
 
         {state?.error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
+          <div
+            id="form-error"
+            role="alert"
+            aria-live="assertive"
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm"
+          >
             {state.error}
           </div>
         )}
 
-        <form action={formAction} className="space-y-4">
+        <form action={formAction} className="space-y-4" aria-describedby={state?.error ? "form-error" : undefined}>
           <div>
             <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-2">
               Full Name *
