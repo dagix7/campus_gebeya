@@ -1,2 +1,21 @@
 @import "tailwindcss";
 
+/* Enable dark mode with class strategy */
+@variant dark (&:where(.dark, .dark *));
+
+/* Custom theme variables for dark mode */
+:root {
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f9fafb;
+  --color-text: #111827;
+  --color-text-secondary: #4b5563;
+  --color-border: #e5e7eb;
+}
+
+.dark {
+  --color-bg: #111827;
+  --color-bg-secondary: #1f2937;
+  --color-text: #f9fafb;
+  --color-text-secondary: #9ca3af;
+  --color-border: #374151;
+}
