@@ -4,7 +4,7 @@ export interface Listing {
   title: string
   description: string
   price_etb: number
-  category: 'Gear' | 'Gigs'
+  category: 'Gear' | 'Gigs' | 'Jobs' | 'Freelance' | 'Courses' | 'Dorm Life' | 'Other'
   status: 'Active' | 'Sold'
   image_url: string | null
   created_at: string

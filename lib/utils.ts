@@ -20,6 +20,11 @@ export const CAMPUS_OPTIONS = Object.values(CAMPUSES);
 export const CATEGORIES = {
   GEAR: "Gear",
   GIGS: "Gigs",
+  JOBS: "Jobs",
+  FREELANCE: "Freelance",
+  COURSES: "Courses",
+  DORM_LIFE: "Dorm Life",
+  OTHER: "Other",
 } as const;
 
 export const CATEGORY_OPTIONS = Object.values(CATEGORIES);
