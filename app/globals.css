@@ -3,19 +3,48 @@
 /* Enable dark mode with class strategy */
 @variant dark (&:where(.dark, .dark *));
 
-/* Custom theme variables for dark mode */
+/* Ethiopian Coffee Theme - Custom Colors */
+@theme {
+  /* Coffee Browns - Primary */
+  --color-coffee-900: #3E2723;
+  --color-coffee-800: #4E342E;
+  --color-coffee-700: #5D4037;
+  --color-coffee-600: #6D4C41;
+  --color-coffee-500: #795548;
+  --color-coffee-400: #8D6E63;
+  --color-coffee-300: #A1887F;
+  --color-coffee-200: #BCAAA4;
+  --color-coffee-100: #D7CCC8;
+  --color-coffee-50: #EFEBE9;
+
+  /* Earth Yellows - Accent */
+  --color-earth-500: #FFD54F;
+  --color-earth-400: #FFEB3B;
+  --color-earth-300: #FFF176;
+  --color-earth-200: #FFF59D;
+  --color-earth-100: #FFF9C4;
+}
+
+/* Light mode variables */
 :root {
   --color-bg: #ffffff;
   --color-bg-secondary: #f9fafb;
   --color-text: #111827;
   --color-text-secondary: #4b5563;
   --color-border: #e5e7eb;
+  --color-primary: #3E2723;
+  --color-primary-light: #5D4037;
+  --color-accent: #FFF176;
 }
 
+/* Dark mode - Coffee-toned grays */
 .dark {
-  --color-bg: #111827;
-  --color-bg-secondary: #1f2937;
-  --color-text: #f9fafb;
-  --color-text-secondary: #9ca3af;
-  --color-border: #374151;
+  --color-bg: #1A1512;
+  --color-bg-secondary: #2D2420;
+  --color-text: #F5F0EB;
+  --color-text-secondary: #9E948E;
+  --color-border: #463D38;
+  --color-primary: #5D4037;
+  --color-primary-light: #795548;
+  --color-accent: #FFD54F;
 }
