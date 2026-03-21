@@ -102,22 +102,22 @@ export default function ConfirmationDialog({
         aria-modal="true"
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
-        className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-200"
+        className="bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6 animate-in fade-in zoom-in-95 duration-200"
       >
         <div className="flex justify-between items-start mb-4">
-          <h3 id={titleId} className="text-xl font-semibold text-gray-900">
+          <h3 id={titleId} className="text-xl font-semibold text-gray-900 dark:text-gray-100">
             {title}
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition p-1 rounded-lg hover:bg-gray-100"
+            className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
             disabled={loading}
             aria-label="Close dialog"
           >
             <X size={24} />
           </button>
         </div>
-        <p id={descriptionId} className="text-gray-600 mb-6">
+        <p id={descriptionId} className="text-gray-600 dark:text-gray-400 mb-6">
           {description}
         </p>
         <div className="flex gap-3 justify-end">
@@ -125,17 +125,17 @@ export default function ConfirmationDialog({
             ref={cancelButtonRef}
             onClick={onClose}
             disabled={loading}
-            className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-coffee-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
             disabled={loading}
-            className={`px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+            className={`px-4 py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 ${
               danger
                 ? 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
-                : 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500'
+                : 'bg-coffee-900 dark:bg-coffee-700 text-white hover:bg-coffee-800 dark:hover:bg-coffee-600 focus:ring-coffee-500'
             }`}
           >
             {loading ? 'Processing...' : confirmText}
