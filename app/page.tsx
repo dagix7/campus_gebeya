@@ -29,14 +29,17 @@ export default async function Home({
   // Get sort option
   const sortOption = SORT_OPTIONS.find(opt => opt.value === params.sort) || SORT_OPTIONS[0];
 
-  // Build the base query
-  let query = supabase.from("listings").select("*", { count: 'exact' }).eq("status", "Active");
+  // Build the base query with profile join for campus filtering
+  let query = supabase
+    .from("listings")
+    .select("*, profiles!inner(campus_name)", { count: 'exact' })
+    .eq("status", "Active");
 
   if (params.category) {
     query = query.eq("category", params.category);
   }
   if (params.campus) {
-    // Note: campus is stored in the profile, so we'll need to filter after joining
+    query = query.eq("profiles.campus_name", params.campus);
   }
   if (params.search) {
     query = query.or(`title.ilike.%${params.search}%,description.ilike.%${params.search}%`);
@@ -59,12 +62,12 @@ export default async function Home({
   if (params.sort) paginationParams.sort = params.sort;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-coffee-50/30 to-gray-100 dark:bg-gray-900">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-12">
+      <div className="bg-gradient-to-r from-coffee-900 to-coffee-700 dark:from-coffee-800 dark:to-coffee-600 text-white py-16 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">CampusGebeya</h1>
-          <p className="text-lg text-blue-100 mb-8">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 font-serif tracking-tight">CampusGebeya</h1>
+          <p className="text-xl text-coffee-100 mb-10 font-medium">
             The marketplace where students buy, sell, and hustle
           </p>
 
@@ -78,14 +81,14 @@ export default async function Home({
                   name="search"
                   placeholder="Search listings..."
                   defaultValue={params.search || ""}
-                  className="w-full pl-10 pr-4 py-2 rounded-lg text-gray-900"
+                  className="w-full pl-10 pr-4 py-3 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border-2 border-transparent focus:border-earth-300 dark:border-gray-700 shadow-sm outline-none transition"
                   aria-label="Search listings"
                 />
               </div>
               <select
                 name="category"
                 defaultValue={params.category || ""}
-                className="px-4 py-2 rounded-lg text-gray-900"
+                className="px-4 py-3 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-sm outline-none"
                 aria-label="Filter by category"
               >
                 <option value="">All Categories</option>
@@ -96,7 +99,7 @@ export default async function Home({
               <select
                 name="campus"
                 defaultValue={params.campus || ""}
-                className="px-4 py-2 rounded-lg text-gray-900"
+                className="px-4 py-3 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-sm outline-none"
                 aria-label="Filter by campus"
               >
                 <option value="">All Campuses</option>
@@ -107,7 +110,7 @@ export default async function Home({
               <select
                 name="sort"
                 defaultValue={params.sort || "newest"}
-                className="px-4 py-2 rounded-lg text-gray-900"
+                className="px-4 py-3 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 shadow-sm outline-none"
                 aria-label="Sort by"
               >
                 {SORT_OPTIONS.map((opt) => (
@@ -116,7 +119,7 @@ export default async function Home({
               </select>
               <button
                 type="submit"
-                className="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition"
+                className="bg-earth-300 text-coffee-900 px-6 py-3 rounded-lg font-bold hover:bg-earth-400 transition shadow-md hover:shadow-lg"
               >
                 Search
               </button>
@@ -128,12 +131,12 @@ export default async function Home({
       {/* Listings Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
             {totalCount} {totalCount === 1 ? 'Listing' : 'Listings'} Found
           </h2>
           <Link
             href="/listings/new"
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="bg-coffee-900 dark:bg-coffee-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-coffee-800 dark:hover:bg-coffee-600 transition shadow-md hover:shadow-lg"
           >
             + List Item
           </Link>
@@ -141,15 +144,15 @@ export default async function Home({
 
         {listings.length === 0 ? (
           <div className="text-center py-12">
-            <div className="max-w-md mx-auto">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                <Search className="w-12 h-12 text-gray-400" />
+            <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-md p-8">
+              <div className="w-24 h-24 mx-auto mb-6 bg-coffee-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                <Search className="w-12 h-12 text-coffee-600 dark:text-gray-400" />
               </div>
-              <p className="text-gray-600 text-lg mb-4">No listings found</p>
-              <p className="text-gray-500 mb-6">Try adjusting your search or filters</p>
+              <p className="text-gray-800 dark:text-gray-200 text-xl font-semibold mb-2">No listings found</p>
+              <p className="text-gray-600 dark:text-gray-400 mb-6">Try adjusting your search or filters</p>
               <Link
                 href="/listings/new"
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 inline-block transition"
+                className="bg-coffee-900 dark:bg-coffee-700 text-white px-6 py-3 rounded-xl font-bold hover:bg-coffee-800 dark:hover:bg-coffee-600 inline-block transition shadow-md hover:shadow-lg"
               >
                 Be the first to list
               </Link>
@@ -162,34 +165,34 @@ export default async function Home({
                 <Link
                   key={listing.id}
                   href={`/listings/${listing.id}`}
-                  className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden group"
+                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group border-2 border-gray-100 dark:border-gray-700 hover:border-coffee-300 dark:hover:border-coffee-600"
                 >
                   {listing.image_url && (
-                    <div className="relative h-48 bg-gray-200">
+                    <div className="relative w-full h-56 bg-gradient-to-br from-coffee-50 to-coffee-100 dark:from-coffee-900 dark:to-gray-800 flex items-center justify-center">
                       <Image
                         src={listing.image_url}
                         alt={listing.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
-                      <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">
+                      <div className="absolute top-3 right-3 bg-coffee-900 dark:bg-coffee-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-10">
                         {listing.category}
                       </div>
                     </div>
                   )}
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-coffee-700 dark:group-hover:text-coffee-400 transition-colors line-clamp-1">
                       {listing.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2 leading-relaxed">
                       {listing.description}
                     </p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-2xl font-bold text-blue-600">
-                        {listing.price_etb.toLocaleString()} ETB
+                    <div className="flex justify-between items-center pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <span className="text-2xl font-bold text-coffee-900 dark:text-coffee-400">
+                        {listing.price_etb.toLocaleString()} <span className="text-base font-normal text-gray-600 dark:text-gray-400">ETB</span>
                       </span>
-                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      <span className="text-xs font-semibold text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-3 py-1.5 rounded-full">
                         {listing.status}
                       </span>
                     </div>
