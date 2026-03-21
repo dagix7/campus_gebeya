@@ -70,7 +70,7 @@ export async function signUp(_prevState: any, formData: FormData): Promise<Actio
     }
 
     revalidatePath('/')
-    redirect('/auth/login?message=Account created successfully. Please log in.')
+    redirect('/auth/verify-id?message=Account created! Please upload your student ID to continue.')
   } catch (error: any) {
     // Handle Next.js redirect (it throws)
     if (error?.digest?.startsWith('NEXT_REDIRECT')) {
@@ -106,6 +106,27 @@ export async function signIn(_prevState: any, formData: FormData): Promise<Actio
 
     if (error) {
       return { error: 'Invalid email or password' }
+    }
+
+    // Check verification status (admins skip verification)
+    const { data: { user: signedInUser } } = await supabase.auth.getUser()
+    if (signedInUser) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('verification_status, is_admin')
+        .eq('id', signedInUser.id)
+        .single()
+
+      // Admins skip verification requirement
+      if (profile?.is_admin) {
+        revalidatePath('/')
+        redirect('/dashboard')
+      }
+
+      if (profile?.verification_status !== 'verified') {
+        revalidatePath('/')
+        redirect('/auth/verify-id')
+      }
     }
 
     revalidatePath('/')
