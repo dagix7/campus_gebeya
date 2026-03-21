@@ -5,13 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Campus list for reference
+// Campus list for reference - only AAU and AASTU allowed
 export const CAMPUSES = {
   AAU_4_KILO: "AAU 4-Kilo",
   AAU_5_KILO: "AAU 5-Kilo",
   AAU_6_KILO: "AAU 6-Kilo",
-  BIT: "BiT",
-  ASTU: "ASTU",
+  AASTU: "AASTU",
 } as const;
 
 export const CAMPUS_OPTIONS = Object.values(CAMPUSES);
