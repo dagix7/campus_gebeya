@@ -175,6 +175,8 @@ export default async function Home({
                         fill
                         className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIhAAAgEDAwUBAAAAAAAAAAAAAQIDAAQRBRIhBhMiMUFR/8QAFQEBAQAAAAAAAAAAAAAAAAAABQf/xAAcEQABBAMBAAAAAAAAAAAAAAABAAIDBAUREiH/2gAMAwEAAhEDEEChTTk63ZQWRjSCKNFx4qO1m+uf/9k="
                       />
                       <div className="absolute top-3 right-3 bg-coffee-900 dark:bg-coffee-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg z-10">
                         {listing.category}

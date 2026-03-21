@@ -2,6 +2,16 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import EditProfileForm from '@/components/edit-profile-form'
 import type { Profile } from '@/types'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Edit Profile",
+  description: "Update your CampusGebeya profile information.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function EditProfilePage() {
   const supabase = await createClient()
