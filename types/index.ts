@@ -20,6 +20,31 @@ export interface Profile {
   avatar_url: string | null
   created_at: string
   updated_at: string
+  // Verification fields
+  verification_status: 'unverified' | 'pending' | 'verified' | 'rejected'
+  student_id_url: string | null
+  verified_at: string | null
+  verified_university: 'AAU' | 'AASTU' | null
+  rejection_reason: string | null
+  submitted_at: string | null
+  is_admin: boolean
+  ocr_confidence: string | null
+}
+
+export interface VerificationLog {
+  id: string
+  user_id: string
+  action: 'submitted' | 'approved' | 'rejected' | 'resubmitted'
+  admin_id: string | null
+  reason: string | null
+  metadata: Record<string, any> | null
+  created_at: string
+}
+
+export type OCRResult = {
+  text: string
+  confidence: 'match_found' | 'no_match' | 'uncertain'
+  matchedPattern?: string
 }
 
 export interface User {
