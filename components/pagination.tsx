@@ -83,7 +83,7 @@ export default function Pagination({
       {currentPage > 1 ? (
         <Link
           href={createPageUrl(currentPage - 1)}
-          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
           aria-label="Go to previous page"
         >
           <ChevronLeft size={16} />
@@ -91,7 +91,7 @@ export default function Pagination({
         </Link>
       ) : (
         <span
-          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed"
+          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg cursor-not-allowed"
           aria-disabled="true"
         >
           <ChevronLeft size={16} />
@@ -106,7 +106,7 @@ export default function Pagination({
             return (
               <span
                 key={`ellipsis-${index}`}
-                className="px-3 py-2 text-gray-500"
+                className="px-3 py-2 text-gray-500 dark:text-gray-400"
                 aria-hidden="true"
               >
                 ...
@@ -121,8 +121,8 @@ export default function Pagination({
               href={createPageUrl(page)}
               className={`px-3 py-2 text-sm font-medium rounded-lg transition ${
                 isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-coffee-900 dark:bg-coffee-700 text-white'
+                  : 'text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
               aria-label={`Go to page ${page}`}
               aria-current={isActive ? 'page' : undefined}
@@ -137,7 +137,7 @@ export default function Pagination({
       {currentPage < totalPages ? (
         <Link
           href={createPageUrl(currentPage + 1)}
-          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
           aria-label="Go to next page"
         >
           <span className="hidden sm:inline">Next</span>
@@ -145,7 +145,7 @@ export default function Pagination({
         </Link>
       ) : (
         <span
-          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed"
+          className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg cursor-not-allowed"
           aria-disabled="true"
         >
           <span className="hidden sm:inline">Next</span>
