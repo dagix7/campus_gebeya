@@ -58,18 +58,18 @@ export default function EmptyState({
 
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4">
-      <div className="w-24 h-24 mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-        <Icon className="w-12 h-12 text-gray-400" />
+      <div className="w-24 h-24 mb-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+        <Icon className="w-12 h-12 text-gray-400 dark:text-gray-500" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-2 text-center">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 text-center">
         {displayTitle}
       </h3>
-      <p className="text-gray-500 text-center mb-6 max-w-sm">
+      <p className="text-gray-500 dark:text-gray-400 text-center mb-6 max-w-sm">
         {displayDescription}
       </p>
       <Link
         href={displayActionHref}
-        className="inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+        className="inline-flex items-center gap-2 bg-coffee-900 dark:bg-coffee-700 text-white px-6 py-2 rounded-lg font-semibold hover:bg-coffee-800 dark:hover:bg-coffee-600 transition"
       >
         <Plus size={18} />
         {displayActionLabel}
