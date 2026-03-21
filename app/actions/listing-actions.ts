@@ -11,14 +11,14 @@ const createListingSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(100, 'Title must not exceed 100 characters'),
   description: z.string().min(20, 'Description must be at least 20 characters').max(1000, 'Description must not exceed 1000 characters'),
   price: z.coerce.number().int('Price must be a whole number').min(1, 'Price must be at least 1 ETB').max(1000000, 'Price must not exceed 1,000,000 ETB'),
-  category: z.enum(['Gear', 'Gigs'], { message: 'Please select a valid category' }),
+  category: z.enum(['Gear', 'Gigs', 'Jobs', 'Freelance', 'Courses', 'Dorm Life', 'Other'], { message: 'Please select a valid category' }),
 })
 
 const updateListingSchema = z.object({
   title: z.string().min(5, 'Title must be at least 5 characters').max(100, 'Title must not exceed 100 characters'),
   description: z.string().min(20, 'Description must be at least 20 characters').max(1000, 'Description must not exceed 1000 characters'),
   price: z.coerce.number().int('Price must be a whole number').min(1, 'Price must be at least 1 ETB').max(1000000, 'Price must not exceed 1,000,000 ETB'),
-  category: z.enum(['Gear', 'Gigs'], { message: 'Please select a valid category' }),
+  category: z.enum(['Gear', 'Gigs', 'Jobs', 'Freelance', 'Courses', 'Dorm Life', 'Other'], { message: 'Please select a valid category' }),
 })
 
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024 // 10MB
