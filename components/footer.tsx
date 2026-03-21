@@ -5,7 +5,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}
           <div>
-            <h3 className="text-xl font-bold text-blue-600 mb-2">CampusGebeya</h3>
+            <h3 className="text-xl font-bold text-coffee-900 dark:text-coffee-400 mb-2 font-serif">CampusGebeya</h3>
             <p className="text-gray-600 dark:text-gray-400">A student-only marketplace for university students in Addis Ababa</p>
           </div>
 
@@ -13,9 +13,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Quick Links</h4>
             <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-              <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Home</a></li>
-              <li><a href="/dashboard" className="hover:text-blue-600 dark:hover:text-blue-400">Dashboard</a></li>
-              <li><a href="/listings/new" className="hover:text-blue-600 dark:hover:text-blue-400">Sell</a></li>
+              <li><a href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Home</a></li>
+              <li><a href="/dashboard" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Dashboard</a></li>
+              <li><a href="/listings/new" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Sell</a></li>
             </ul>
           </div>
 
@@ -23,9 +23,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Support</h4>
             <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-              <li><a href="mailto:support@campusgebeya.com" className="hover:text-blue-600 dark:hover:text-blue-400">Contact Us</a></li>
-              <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">About</a></li>
-              <li><a href="/" className="hover:text-blue-600 dark:hover:text-blue-400">Terms of Service</a></li>
+              <li><a href="mailto:support@campusgebeya.com" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Contact Us</a></li>
+              <li><a href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">About</a></li>
+              <li><a href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Terms of Service</a></li>
             </ul>
           </div>
         </div>
