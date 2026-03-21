@@ -40,7 +40,8 @@ export default function ShareButton({ title, url, className = '' }: ShareButtonP
   return (
     <button
       onClick={handleShare}
-      className={`w-full border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 flex items-center justify-center gap-2 transition ${className}`}
+      className={`w-full border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 py-3 rounded-lg font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center justify-center gap-2 transition ${className}`}
+      aria-label="Share this listing"
     >
       <Share2 size={20} />
       Share
