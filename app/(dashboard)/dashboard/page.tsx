@@ -1,8 +1,19 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
-import { Edit2 } from "lucide-react";
+import { Edit2, Package, ShoppingBag, TrendingUp } from "lucide-react";
 import DeleteListingButton from "@/components/delete-listing-button";
+import StatusToggleButton from "@/components/status-toggle-button";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Manage your listings, view stats, and update your profile on CampusGebeya.",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -33,13 +44,72 @@ export default async function DashboardPage() {
 
   const listings = listingsData || [];
 
+  // Calculate stats
+  const totalListings = listings.length;
+  const activeListings = listings.filter((l: any) => l.status === 'Active').length;
+  const soldListings = listings.filter((l: any) => l.status === 'Sold').length;
+  const totalRevenue = listings
+    .filter((l: any) => l.status === 'Sold')
+    .reduce((sum: number, l: any) => sum + (l.price_etb || 0), 0);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-coffee-50/30 to-gray-100 dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-coffee-50/30 to-gray-100 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-3">Dashboard</h1>
           <p className="text-lg text-gray-700 dark:text-gray-400 font-medium">Manage your listings and profile</p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border-2 border-gray-100 dark:border-gray-700 p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-coffee-100 dark:bg-coffee-900/30 rounded-xl flex items-center justify-center">
+                <Package size={24} className="text-coffee-600 dark:text-coffee-400" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Total</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{totalListings}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border-2 border-gray-100 dark:border-gray-700 p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+                <ShoppingBag size={24} className="text-green-600 dark:text-green-400" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Active</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{activeListings}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border-2 border-gray-100 dark:border-gray-700 p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+                <TrendingUp size={24} className="text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Sold</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{soldListings}</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-md border-2 border-gray-100 dark:border-gray-700 p-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-earth-100 dark:bg-earth-500/20 rounded-xl flex items-center justify-center">
+                <span className="text-earth-500 dark:text-earth-400 font-bold text-lg">ETB</span>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">Revenue</p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{totalRevenue.toLocaleString()}</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Profile Card */}
@@ -114,15 +184,10 @@ export default async function DashboardPage() {
                       >
                         {listing.title}
                       </Link>
-                      <span
-                        className={`inline-block px-3 py-1.5 rounded-full text-xs font-bold ml-3 ${
-                          listing.status === "Active"
-                            ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400"
-                            : "bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-300"
-                        }`}
-                      >
-                        {listing.status}
-                      </span>
+                      <StatusToggleButton
+                        listingId={listing.id}
+                        currentStatus={listing.status}
+                      />
                     </div>
                     <div className="flex justify-between items-center text-sm text-gray-700 dark:text-gray-300 mb-3 font-medium">
                       <span>{listing.category}</span>
@@ -185,15 +250,10 @@ export default async function DashboardPage() {
                           {listing.price_etb.toLocaleString()} ETB
                         </td>
                         <td className="py-4 px-4">
-                          <span
-                            className={`inline-block px-4 py-1.5 rounded-full text-sm font-bold ${
-                              listing.status === "Active"
-                                ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400"
-                                : "bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-300"
-                            }`}
-                          >
-                            {listing.status}
-                          </span>
+                          <StatusToggleButton
+                            listingId={listing.id}
+                            currentStatus={listing.status}
+                          />
                         </td>
                         <td className="py-4 px-4 space-x-2">
                           <Link
