@@ -43,11 +43,11 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-50">
+    <nav className="border-b border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg backdrop-saturate-150 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-bold text-blue-600">
+          <Link href="/" className="text-2xl font-bold text-coffee-900 dark:text-coffee-400 font-serif">
             CampusGebeya
           </Link>
 
@@ -55,7 +55,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="/"
-              className={`transition-colors ${isActive('/') ? 'text-blue-600 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+              className={`transition-colors ${isActive('/') ? 'text-coffee-900 dark:text-coffee-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400'}`}
               aria-current={isActive('/') ? 'page' : undefined}
             >
               Home
@@ -64,14 +64,14 @@ export default function Navbar() {
               <>
                 <Link
                   href="/dashboard"
-                  className={`transition-colors ${isActive('/dashboard') ? 'text-blue-600 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+                  className={`transition-colors ${isActive('/dashboard') ? 'text-coffee-900 dark:text-coffee-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400'}`}
                   aria-current={isActive('/dashboard') ? 'page' : undefined}
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/listings/new"
-                  className={`transition-colors ${isActive('/listings/new') ? 'text-blue-600 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+                  className={`transition-colors ${isActive('/listings/new') ? 'text-coffee-900 dark:text-coffee-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400'}`}
                   aria-current={isActive('/listings/new') ? 'page' : undefined}
                 >
                   Sell
@@ -87,14 +87,14 @@ export default function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 flex items-center gap-2"
+                  className="text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400 flex items-center gap-2"
                 >
                   <LogIn size={18} />
                   Login
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="bg-coffee-900 dark:bg-coffee-700 text-white px-4 py-2 rounded-lg hover:bg-coffee-800 dark:hover:bg-coffee-600 transition"
                 >
                   Sign Up
                 </Link>
@@ -131,7 +131,7 @@ export default function Navbar() {
           <nav id="mobile-menu" role="navigation" aria-label="Mobile navigation" className="md:hidden pb-4 space-y-2">
             <Link
               href="/"
-              className={`block py-2 transition-colors ${isActive('/') ? 'text-blue-600 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+              className={`block py-2 transition-colors ${isActive('/') ? 'text-coffee-900 dark:text-coffee-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400'}`}
               aria-current={isActive('/') ? 'page' : undefined}
               onClick={() => setIsMenuOpen(false)}
             >
@@ -141,7 +141,7 @@ export default function Navbar() {
               <>
                 <Link
                   href="/dashboard"
-                  className={`block py-2 transition-colors ${isActive('/dashboard') ? 'text-blue-600 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+                  className={`block py-2 transition-colors ${isActive('/dashboard') ? 'text-coffee-900 dark:text-coffee-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400'}`}
                   aria-current={isActive('/dashboard') ? 'page' : undefined}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -149,7 +149,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/listings/new"
-                  className={`block py-2 transition-colors ${isActive('/listings/new') ? 'text-blue-600 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'}`}
+                  className={`block py-2 transition-colors ${isActive('/listings/new') ? 'text-coffee-900 dark:text-coffee-400 font-medium' : 'text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400'}`}
                   aria-current={isActive('/listings/new') ? 'page' : undefined}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -161,14 +161,14 @@ export default function Navbar() {
               <>
                 <Link
                   href="/auth/login"
-                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 py-2"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-coffee-700 dark:hover:text-coffee-400 py-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Login
                 </Link>
                 <Link
                   href="/auth/signup"
-                  className="block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="block bg-coffee-900 dark:bg-coffee-700 text-white px-4 py-2 rounded-lg hover:bg-coffee-800 dark:hover:bg-coffee-600 transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Sign Up
