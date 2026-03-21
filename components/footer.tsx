@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 py-8 mt-12">
@@ -13,9 +15,9 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Quick Links</h4>
             <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-              <li><a href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Home</a></li>
-              <li><a href="/dashboard" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Dashboard</a></li>
-              <li><a href="/listings/new" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Sell</a></li>
+              <li><Link href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Home</Link></li>
+              <li><Link href="/dashboard" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Dashboard</Link></li>
+              <li><Link href="/listings/new" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Sell</Link></li>
             </ul>
           </div>
 
@@ -23,16 +25,16 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4">Support</h4>
             <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-              <li><a href="mailto:support@campusgebeya.com" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Contact Us</a></li>
-              <li><a href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">About</a></li>
-              <li><a href="/" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Terms of Service</a></li>
+              <li><Link href="/about" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">About Us</Link></li>
+              <li><a href="mailto:support@campusgebeya.com" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Contact</a></li>
+              <li><a href="https://t.me/campusgebeya" target="_blank" rel="noopener noreferrer" className="hover:text-coffee-700 dark:hover:text-coffee-400 transition-colors">Telegram</a></li>
             </ul>
           </div>
         </div>
 
         {/* Bottom */}
         <div className="border-t border-gray-200 dark:border-gray-700 pt-8 text-center text-gray-600 dark:text-gray-400">
-          <p>&copy; 2026 CampusGebeya. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} CampusGebeya. All rights reserved.</p>
         </div>
       </div>
     </footer>
