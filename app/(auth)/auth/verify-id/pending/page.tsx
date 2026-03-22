@@ -103,12 +103,12 @@ export default async function PendingPage() {
             </div>
 
             <div className="space-y-3">
-              <button
-                onClick={() => window.location.reload()}
-                className="w-full bg-blue-500 text-white py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors"
+              <Link
+                href="/auth/verify-id/pending"
+                className="block w-full bg-blue-500 text-white py-2 rounded-lg font-medium hover:bg-blue-600 transition-colors text-center"
               >
                 Refresh Status
-              </button>
+              </Link>
 
               <Link
                 href="/api/auth/signout"
