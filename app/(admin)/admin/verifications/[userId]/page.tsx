@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 export default async function ReviewVerificationPage({
   params,
 }: {
-  params: { userId: string }
+  params: Promise<{ userId: string }>
 }) {
-  const { userId } = params
+  const { userId } = await params
 
   // Get verification details
   const { profile, logs } = await getVerificationDetails(userId)
