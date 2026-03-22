@@ -10,6 +10,7 @@ import ThemeToggle from "./theme-toggle";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
   const pathname = usePathname();
@@ -22,6 +23,17 @@ export default function Navbar() {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
+
+      // Check if user is admin
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single();
+        setIsAdmin(profile?.is_admin || false);
+      }
+
       setLoading(false);
     };
 
@@ -29,8 +41,20 @@ export default function Navbar() {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user || null);
+
+      // Check admin status on auth change
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', session.user.id)
+          .single();
+        setIsAdmin(profile?.is_admin || false);
+      } else {
+        setIsAdmin(false);
+      }
     });
 
     return () => subscription?.unsubscribe();
@@ -101,13 +125,28 @@ export default function Navbar() {
               </>
             )}
             {user && (
-              <button
-                onClick={handleLogout}
-                className="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-2"
-              >
-                <LogOut size={18} />
-                Logout
-              </button>
+              <>
+                {isAdmin && (
+                  <>
+                    <Link
+                      href="/admin/verifications"
+                      className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
+                    >
+                      Admin Panel
+                    </Link>
+                    <span className="px-2 py-1 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded">
+                      ADMIN
+                    </span>
+                  </>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 flex items-center gap-2"
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </>
             )}
           </div>
 
@@ -176,12 +215,28 @@ export default function Navbar() {
               </>
             )}
             {user && (
-              <button
-                onClick={handleLogout}
-                className="block w-full text-left text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 py-2"
-              >
-                Logout
-              </button>
+              <>
+                {isAdmin && (
+                  <>
+                    <Link
+                      href="/admin/verifications"
+                      className="block py-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Admin Panel
+                    </Link>
+                    <span className="inline-block px-2 py-1 text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 rounded mb-2">
+                      ADMIN
+                    </span>
+                  </>
+                )}
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left text-gray-700 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 py-2"
+                >
+                  Logout
+                </button>
+              </>
             )}
           </nav>
         )}
