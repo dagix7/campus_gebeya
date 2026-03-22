@@ -151,7 +151,7 @@ export default function VerifyIdForm() {
           ocrResult.confidence === 'match_found'
             ? 'bg-green-50 border-green-200 text-green-700'
             : ocrResult.confidence === 'no_match'
-            ? 'bg-red-50 border-red-200 text-red-700'
+            ? 'bg-blue-50 border-blue-200 text-blue-700'
             : 'bg-yellow-50 border-yellow-200 text-yellow-700'
         }`}>
           <p className="font-medium">
@@ -159,10 +159,10 @@ export default function VerifyIdForm() {
               <>✓ University detected: {ocrResult.matchedPattern}! Your submission will be sent for admin review.</>
             )}
             {ocrResult.confidence === 'no_match' && (
-              <>⚠ Could not detect AAU or AASTU in your ID. Please ensure the university name is clearly visible and try again.</>
+              <>ℹ️ University text not automatically detected, but your submission will still be reviewed by our team. This is normal for older or worn IDs.</>
             )}
             {ocrResult.confidence === 'uncertain' && (
-              <>⚠ Image quality unclear. Your submission will be sent for manual review. For faster approval, consider uploading a clearer photo.</>
+              <>ℹ️ Image quality unclear. Your submission will be sent for manual review. For faster approval, consider uploading a clearer photo.</>
             )}
           </p>
         </div>
