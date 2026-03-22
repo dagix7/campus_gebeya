@@ -44,14 +44,10 @@ export async function uploadStudentId(
       return { error: 'File must be JPG, PNG, or PDF' }
     }
 
-    // Determine status based on OCR result
-    let status: 'pending' | 'rejected' = 'pending'
-    let rejectionReason = null
-
-    if (ocrConfidence === 'no_match') {
-      status = 'rejected'
-      rejectionReason = 'University not detected in ID image. Please ensure your ID clearly shows AAU or AASTU and upload a clearer photo.'
-    }
+    // All submissions go to pending for manual admin review
+    // OCR confidence is stored as metadata to help admins prioritize, not to auto-reject
+    const status = 'pending'
+    const rejectionReason = null
 
     // Upload to private bucket with user ID folder
     const fileExt = file.name.split('.').pop()
@@ -92,11 +88,8 @@ export async function uploadStudentId(
 
     revalidatePath('/auth/verify-id')
 
-    if (status === 'rejected') {
-      redirect('/auth/verify-id/rejected')
-    } else {
-      redirect('/auth/verify-id/pending')
-    }
+    // Always redirect to pending page - admin will review all submissions
+    redirect('/auth/verify-id/pending')
 
   } catch (error: any) {
     // Handle Next.js redirect (it throws)
