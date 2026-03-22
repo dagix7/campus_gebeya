@@ -4,16 +4,6 @@ import Link from "next/link";
 import { Edit2, Package, ShoppingBag, TrendingUp } from "lucide-react";
 import DeleteListingButton from "@/components/delete-listing-button";
 import StatusToggleButton from "@/components/status-toggle-button";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Manage your listings, view stats, and update your profile on CampusGebeya.",
-  robots: {
-    index: false,
-    follow: false,
-  },
-};
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -28,7 +18,7 @@ export default async function DashboardPage() {
     redirect("/auth/login");
   }
 
-  // Get user's profile
+  
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
