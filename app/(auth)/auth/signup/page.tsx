@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Join CampusGebeya - the student marketplace for Ethiopian university students. Create your account to start buying and selling.",
   openGraph: {
     title: "Create Account | CampusGebeya",
-    description: "Join CampusGebeya - the student marketplace for Ethiopian university students.",
+    description: "Join CampusGebeya - the leading marketplace for Ethiopian university students.",
   },
 }
 
